@@ -68,7 +68,7 @@ done
 echo "Building base image for SITS..."
 cd base
 
-SITS_BASE_IMAGE="jupyter/base-notebook:ubuntu-${SITS_UBUNTU_VERSION}"
+SITS_BASE_IMAGE="nvidia/cuda:11.7.1-cudnn8-devel-ubuntu${SITS_UBUNTU_VERSION}"
 SITS_BASE_IMAGE_TAG="${SITS_TAG_PREFIX}/sits-base:${SITS_TAG_VERSION}"
 
 docker build ${SITS_BUILD_MODE} \
@@ -114,18 +114,4 @@ SITS_RSTUDIO_DOCKER_IMAGE_TAG="${SITS_TAG_PREFIX}/sits-rstudio:${SITS_TAG_VERSIO
 docker build ${SITS_BUILD_MODE} \
        --build-arg BASE_IMAGE=${SITS_DOCKER_IMAGE_TAG} \
        -t ${SITS_RSTUDIO_DOCKER_IMAGE_TAG} \
-       --file Dockerfile  .
-
-#
-# Build Jupyter for SITS image
-#
-echo "Building Jupyter for SITS image..."
-cd ../jupyter
-
-SITS_JUPYTER_DOCKER_IMAGE_TAG="${SITS_TAG_PREFIX}/sits-jupyter:${SITS_TAG_VERSION}"
-docker build ${SITS_BUILD_MODE} \
-       --build-arg BASE_IMAGE=${SITS_RSTUDIO_DOCKER_IMAGE_TAG} \
-       --build-arg SITS_TAG_NOTEBOOKS_REPO=v${SITS_TAG_NOTEBOOKS_REPO} \
-       --build-arg SITS_NOTEBOOKS_REPO=${SITS_NOTEBOOKS_REPO} \
-       -t ${SITS_JUPYTER_DOCKER_IMAGE_TAG} \
        --file Dockerfile  .
